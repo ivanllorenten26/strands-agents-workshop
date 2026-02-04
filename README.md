@@ -9,6 +9,7 @@ This workshop is designed for developers and engineers looking to master agent d
 ## 🎓 Workshop Sessions
 
 ### Part #1: Introduction to Agents
+
 - **Topics Covered:**
   - What is an agent? Core concepts and fundamentals
   - Introduction to Strands framework
@@ -17,6 +18,7 @@ This workshop is designed for developers and engineers looking to master agent d
   - Agent UI interaction from the terminal (Python-based loop)
 
 ### Part #2: Agent Memory & Tools
+
 - **Topics Covered:**
   - Short-term and long-term memory concepts
   - Strands Agents Memory architecture
@@ -25,6 +27,7 @@ This workshop is designed for developers and engineers looking to master agent d
   - Memory management best practices
 
 ### Part #3: Multi-Agent Patterns
+
 - **Topics Covered:**
   - Graph-based agent patterns
   - Swarm intelligence patterns
@@ -33,6 +36,7 @@ This workshop is designed for developers and engineers looking to master agent d
   - Pattern design and implementation
 
 ### Part #4: Agent Evaluations
+
 - **Topics Covered:**
   - Evaluation theory and methodologies
   - Evaluations SDK for Strands
@@ -41,6 +45,7 @@ This workshop is designed for developers and engineers looking to master agent d
   - Real-world evaluation examples
 
 ### Part #5: Observability & Monitoring
+
 - **Topics Covered:**
   - OpenTelemetry (OTEL) integration
   - LangFuse for local observability
@@ -49,14 +54,16 @@ This workshop is designed for developers and engineers looking to master agent d
   - Production-ready observability setups
 
 ### Part #6: Simulators & AWS AgentCore Introduction
+
 - **Topics Covered:**
   - Agent simulators and testing environments
   - Introduction to AWS AgentCore
   - AWS CDK for infrastructure as code
   - Deployment preparation
-  - *(Subject to availability of Ops26-dev environment)*
+  - _(Subject to availability of Ops26-dev environment)_
 
 ### Part #7: AgentCore Deep Dive
+
 - **Topics Covered:**
   - AgentCore Gateway
   - Memory management in AgentCore
@@ -67,12 +74,14 @@ This workshop is designed for developers and engineers looking to master agent d
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Python 3.8+
 - Basic understanding of programming concepts
 - Familiarity with command-line tools
 - AWS account (for later sessions)
 
 ### Installation
+
 ```bash
 # Clone the repository
 git clone https://github.com/ivanllorenten26/strands-agents-workshop.git
@@ -84,6 +93,7 @@ cd strands-agents-workshop
 ## 📁 Repository Structure
 
 The workshop materials will be organized by session:
+
 ```
 strands-agents-workshop/
 ├── part-1-intro/              # Introduction to agents
@@ -108,6 +118,7 @@ strands-agents-workshop/
 ## 📚 Learning Outcomes
 
 By completing this workshop, you will:
+
 - ✅ Understand agent architecture and design patterns
 - ✅ Build functional agents using Strands framework
 - ✅ Implement memory management and tool integration
@@ -134,6 +145,7 @@ This is a learning workshop repository. For questions or feedback, please reach 
 ## 📞 Support
 
 For support and questions about the workshop:
+
 - Check session-specific README files
 - Review the example code provided in each module
 - Consult the official Strands and AWS AgentCore documentation
