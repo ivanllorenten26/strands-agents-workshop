@@ -7,25 +7,22 @@ This directory contains a complete, working implementation of the Part 1 exercis
 ### ✅ Agent Initialization
 
 - Loads environment variables from `.env` file
-- Creates AWS Bedrock client for eu-central-1 region
-- Configures Strands agent with Bedrock Nova Lite model
-- Falls back to AWS CLI credentials if not in .env
-- Sets up agent with custom instructions
+- Imports BedrockModel from `strands.models`
+- Creates BedrockModel instance with Nova Lite model ID
+- Configures region as eu-central-1
+- Creates Strands Agent with BedrockModel
+- Sets up agent with system prompt
 
-### ✅ Terminal Loop
+### ✅ Terminal Loop (Pre-implemented)
+
+The terminal loop is **already complete** in both starter and solution code:
 
 - Interactive command-line interface
 - Handles user input and agent responses
 - Supports exit commands (`exit`, `quit`, `bye`)
 - Graceful error handling
 - Keyboard interrupt handling (Ctrl+C)
-
-### ✅ Error Handling
-
-- Missing API key validation
-- Empty input handling
-- Runtime error management
-- Helpful error messages
+- Empty input validation
 
 ## Running the Solution
 
@@ -50,54 +47,70 @@ python agent.py
 
 ## Key Learning Points
 
-### 1. Agent Configuration
+### 1. BedrockModel Configuration
 
-# Create Bedrock client
-
-bedrock_client = boto3.client(
-'bedrock-runtime',
-region_name='eu-central-1'
-)
-
-# Configure agent with Bedrock
-
-agent = Agent(
-name="Workshop Assistant",
-instructions="Your agent's role and behavior",
-model="us.amazon.nova-lite-v1:0",
-client=bedrock_clientini",
-api_key=api_key
-)
-
-````
-
-### 2. Basic Agent Loop
 ```python
-while True:
-    user_input = input("You: ")
-    if user_input.lower() in ['exit', 'quit']:
-  AWS Bedrock client configuration
-- Fallback to AWS CLI credentials
--       break
-    response = agent.run(user_input)
-    print(f"Agent: {response}")
-````
+from strands.models import BedrockModel
+
+# Create BedrockModel instance
+bedrock_model = BedrockModel(
+    model_id="us.amazon.nova-lite-v1:0",
+    region_name="eu-central-1",
+)
+```
+
+### 2. Agent Creation
+
+```python
+from strands import Agent
+
+# Configure agent with BedrockModel
+agent = Agent(
+    model=bedrock_model,
+    system_prompt="You are a helpful AI assistant."
+)
+```
+
+### 3. Terminal Loop (Pre-implemented)
+
+```python
+# This is already complete in the starter code
+def terminal_loop(agent):
+    while True:
+        user_input = input("You: ").strip()
+        if user_input.lower() in ["exit", "quit", "bye"]:
+            break
+        response = agent(user_input)
+        print(f"Agent: {response}")
+```
 
 ### 3. Best Practices Demonstrated
 
-- Environment variable management with `p and boto3
-- AWS Bedrock client initialization
-- Full implementation of `initialize_agent()` with Bedrock
-- Clean code structure with functions
-- User-friendly terminal interface
+- Environment variable management with `python-dotenv`
+- Using Strands native BedrockModel integration
+- No need for manual boto3 client setup
+- AWS credentials handled automatically via environment or AWS CLI
+- Clean code structure with separate functions
+- User-friendly terminal interface (pre-implemented)
 - Graceful shutdown handling
 
 ## Differences from Starter Code
 
-The solution includes:
+The starter code includes:
 
-- Complete imports from Strands framework
-- Full implementation of `initialize_agent()`
+- Complete imports structure (commented out as TODOs)
+- Empty `initialize_agent()` function with TODO instructions
+- **Complete and working** `terminal_loop()` function
+- Complete `main()` function
+- All supporting files (.env.example, requirements.txt, .gitignore)
+
+The solution adds:
+
+- Uncommented imports (`Agent`, `BedrockModel`)
+- Full implementation of `initialize_agent()`:
+  - BedrockModel instance creation
+  - Agent configuration with model and system_prompt
+  - Return statement with configured agent
 - Working conversation loop in `terminal_loop()`
 - Comprehensive error handling
 - User-friendly messages and formatting
