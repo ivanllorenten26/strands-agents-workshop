@@ -138,10 +138,6 @@ By completing this workshop, you will:
 
 This is a learning workshop repository. For questions or feedback, please reach out to the workshop organizers.
 
-## 📝 License
-
-[Specify your license here]
-
 ## 📞 Support
 
 For support and questions about the workshop:
@@ -152,7 +148,7 @@ For support and questions about the workshop:
 
 ---
 
-**Workshop Start Date:** [Insert date]  
+**Workshop Start Date:** 2026-02-06
 **Duration:** 7 weeks (1 session per week)  
 **Format:** Hands-on with practical examples and exercises
 
