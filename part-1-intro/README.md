@@ -64,7 +64,7 @@ Contains a complete, working implementation that you can reference if you get st
 
 - Python 3.8 or higher
 - AWS account with Bedrock access in eu-central-1 region
-- AWS credentials (access key and secret key)
+- Teleport access configured for AWS credentials
 - Bedrock Nova Lite model enabled in your AWS account
 
 ### Setup Instructions
@@ -88,14 +88,15 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Set up your environment variables:
+4. Set up AWS credentials via Teleport:
 
 ```bash
-cp .env.example .env
-# Edit .env and add your AWS credentials:
-# - AWS_ACCESS_KEY_ID
-# - AWS_SECRET_ACCESS_KEY
-# Or use AWS CLI credentials (aws configure)
+# Use Teleport to get temporary AWS credentials
+# Copy the export commands provided by Teleport and run them:
+export AWS_ACCESS_KEY_ID="your-access-key"
+export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_CA_BUNDLE="/path/to/ca-bundle.pem"
+export HTTPS_PROXY="http://127.0.0.1:port"
 ```
 
 5. Review the starter code and understand the basic structure

@@ -4,17 +4,14 @@ Basic agent implementation with terminal UI loop
 
 Your task: Complete the initialize_agent() function to create a working Strands agent.
 The terminal loop is already implemented for you.
-"""
 
-import os
-from dotenv import load_dotenv
+Note: AWS credentials are managed via Teleport. Make sure you have exported
+the required environment variables before running this script.
+"""
 
 # TODO: Add your imports here
 # from strands import Agent
 # from strands.models import BedrockModel
-
-# Load environment variables
-load_dotenv()
 
 
 def initialize_agent():

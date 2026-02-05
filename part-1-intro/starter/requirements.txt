@@ -2,4 +2,3 @@
 # Core dependencies for building your first agent
 
 strands-agents>=0.1.0
-python-dotenv>=1.0.0

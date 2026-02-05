@@ -7,15 +7,13 @@ This solution demonstrates:
 2. Handling user input through a terminal interface
 3. Processing queries and generating responses
 4. Maintaining a conversation loop with proper error handling
+
+Note: AWS credentials are managed via Teleport. Make sure you have exported
+the required environment variables before running this script.
 """
 
-import os
-from dotenv import load_dotenv
 from strands import Agent
 from strands.models import BedrockModel
-
-# Load environment variables from .env file
-load_dotenv()
 
 
 def initialize_agent():
@@ -27,7 +25,7 @@ def initialize_agent():
     """
     # Create a BedrockModel instance with the desired configuration
     bedrock_model = BedrockModel(
-        model_id=os.getenv("MODEL", "eu.amazon.nova-lite-v1:0"),
+        model_id="eu.amazon.nova-lite-v1:0",
         region_name="eu-central-1",
     )
 
@@ -65,7 +63,7 @@ def terminal_loop(agent):
                 continue
 
             # Process the query with the agent
-            response = agent.run(user_input)
+            response = agent(user_input)
 
             # Display the response
             print(f"\nAgent: {response}\n")

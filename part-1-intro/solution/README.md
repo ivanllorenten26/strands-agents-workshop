@@ -36,10 +36,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Set up environment
-cp .env.example .env
-# Edit .env and add your AWS credentials
-# Or use: aws configure (if using AWS CLI)
+# Set up AWS credentials via Teleport
+# Copy the export commands provided by Teleport and run them:
+export AWS_ACCESS_KEY_ID="your-access-key"
+export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_CA_BUNDLE="/path/to/ca-bundle.pem"
+export HTTPS_PROXY="http://127.0.0.1:port"
 
 # Run the agent
 python agent.py
@@ -86,10 +88,9 @@ def terminal_loop(agent):
 
 ### 3. Best Practices Demonstrated
 
-- Environment variable management with `python-dotenv`
 - Using Strands native BedrockModel integration
 - No need for manual boto3 client setup
-- AWS credentials handled automatically via environment or AWS CLI
+- AWS credentials handled automatically via Teleport environment variables
 - Clean code structure with separate functions
 - User-friendly terminal interface (pre-implemented)
 - Graceful shutdown handling
