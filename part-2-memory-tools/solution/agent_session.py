@@ -1,3 +1,16 @@
+"""
+Session management in Strands Agents provides a robust mechanism
+for persisting agent state and conversation history across multiple interactions.
+This enables agents to maintain context and continuity even when the application restarts
+or when deployed in distributed environments.
+
+Strands offers two built-in session managers for persisting agent sessions:
+- FileSessionManager: Stores sessions in the local filesystem
+- S3SessionManager: Stores sessions in Amazon S3 buckets
+
+https://strandsagents.com/latest/documentation/docs/user-guide/concepts/agents/session-management/
+"""
+
 import os
 import sys
 
