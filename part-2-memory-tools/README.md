@@ -70,9 +70,12 @@ export HTTPS_PROXY="http://127.0.0.1:port"
 
 ### Running Your Agent
 
-```bash
-python agent.py
-```
+1. Tools `python agent_tools.py`
+2. Custom Tools `python agent_custom_tools.py`
+3. Session Management `python agent_session.py`
+4. Conversation Management `python agent_conversation.py`
+5. AgentCore Memory `python agent_agentcore_memory.py` (will not work since the Memory id is missing)
+6. Bonus: Executors `python agent_executors.py`
 
 The agent will start an interactive terminal session where you can chat with it. Type `exit` or `quit` to end the conversation.
 
