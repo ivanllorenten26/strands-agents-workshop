@@ -6,7 +6,6 @@ def terminal_loop(agent):
     Args:
         agent: Initialized Strands agent instance
     """
-    print("Agent initialized! Type 'exit' or 'quit' to end the conversation.\n")
 
     while True:
         try:
