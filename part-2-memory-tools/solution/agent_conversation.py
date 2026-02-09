@@ -1,3 +1,14 @@
+"""
+Conversation Manager
+
+The SDK provides a flexible system for context management through the ConversationManager interface. This allows you to implement different strategies for managing conversation history. You can either leverage one of Strands's provided managers:
+
+- NullConversationManager: A simple implementation that does not modify conversation history
+- SlidingWindowConversationManager: Maintains a fixed number of recent messages (default manager)
+- SummarizingConversationManager: Intelligently summarizes older messages to preserve context
+
+https://strandsagents.com/latest/documentation/docs/user-guide/concepts/agents/conversation-management/
+"""
 import os
 import sys
 
