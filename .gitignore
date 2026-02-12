@@ -48,3 +48,4 @@ ENV/
 .coverage
 htmlcov/
 agent-session
+*evaluation.json*
