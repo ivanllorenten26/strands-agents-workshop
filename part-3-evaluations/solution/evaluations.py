@@ -87,4 +87,4 @@ reports[0].run_display()
 
 # Save experiment for later analysis
 experiment.to_file("sum_calculator_evaluation")
-print("\nExperiment saved to ./experiment_files/sum_calculator_evaluation.json")
+print("\nExperiment saved to ./sum_calculator_evaluation.json")
