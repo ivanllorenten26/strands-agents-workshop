@@ -49,7 +49,18 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Review the starter code and look for TODOs in each file
+4. Set up AWS credentials via Teleport:
+
+```bash
+# Use Teleport to get temporary AWS credentials
+# Copy the export commands provided by Teleport and run them:
+export AWS_ACCESS_KEY_ID="your-access-key"
+export AWS_SECRET_ACCESS_KEY="your-secret-key"
+export AWS_CA_BUNDLE="/path/to/ca-bundle.pem"
+export HTTPS_PROXY="http://127.0.0.1:port"
+```
+
+5. Review the starter code and look for TODOs in each file
 
 ### Running Your Evaluations
 
