@@ -1,7 +1,9 @@
 """
-Strands Evaluations: tool usage evaluations
-
+Strands Evaluations - Tool Usage (Trajectory) Evaluation
 https://strandsagents.com/latest/documentation/docs/user-guide/evals-sdk/quickstart/#tool-usage-evaluation
+
+Your task: Implement get_response to return both output AND trajectory.
+This verifies the agent uses the correct tools.
 """
 from strands_evals import Case, Experiment
 from strands_evals.evaluators import TrajectoryEvaluator
