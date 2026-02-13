@@ -2,35 +2,75 @@
 
 Learn how to evaluate AI agents using the `strands-agents-evals` framework. This module covers different evaluation strategies from simple output validation to complex multi-turn conversation simulations.
 
-## Quick Start
+## 📚 Learning Objectives
+
+By the end of this session, you will:
+
+- ✅ Understand how to define test cases and run evaluation experiments
+- ✅ Write custom rubrics for LLM-as-judge scoring with `OutputEvaluator`
+- ✅ Validate agent tool usage with `TrajectoryEvaluator`
+- ✅ Simulate multi-turn conversations with `ActorSimulator` and `ActorProfile`
+- ✅ Auto-generate test cases using `ExperimentGenerator`
+
+## 🛠️ Session Structure
+
+### `/starter` Directory
+
+Contains boilerplate code with TODOs for you to implement. Each file has the imports, structure, and hints — you fill in the evaluation logic.
+
+### `/solution` Directory
+
+Contains a complete, working implementation that you can reference if you get stuck or want to compare your approach.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Python 3.8 or higher
+- AWS account with Bedrock access
+
+### Setup Instructions
+
+1. Navigate to the starter directory:
 
 ```bash
-cd starter
-uv venv && source .venv/bin/activate
-uv pip install -r requirements.txt
-python output_evaluations.py
+cd part-3-evaluations/starter
 ```
+
+2. Create and activate a virtual environment:
+
+```bash
+uv venv && source .venv/bin/activate
+```
+
+3. Install dependencies:
+
+```bash
+uv pip install -r requirements.txt
+```
+
+4. Review the starter code and look for TODOs in each file
+
+### Running Your Evaluations
+
+1. Output evaluation: `python output_evaluations.py`
+2. Tool usage (trajectory) evaluation: `python tools_evaluations.py`
+3. User simulation: `python simulation_evaluation.py`
+4. Auto-generated test cases: `python generated_evaluations.py`
 
 ---
 
-## Evaluation Files Index
+## ✏️ Exercises
 
-| File                                                          | Purpose                                        | Key Components                               |
-| ------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------- |
-| [output_evaluations.py](solution/output_evaluations.py)       | Basic output evaluation with manual test cases | `Case`, `Experiment`, `OutputEvaluator`      |
-| [tools_evaluations.py](solution/tools_evaluations.py)         | Tool usage trajectory evaluation               | `TrajectoryEvaluator`, `tools_use_extractor` |
-| [simulation_evaluation.py](solution/simulation_evaluation.py) | Multi-turn conversation simulation             | `ActorSimulator`, `ActorProfile`             |
-| [generated_evaluations.py](solution/generated_evaluations.py) | Auto-generated test cases                      | `ExperimentGenerator`                        |
+### Exercise 1: `output_evaluations.py`
 
-### output_evaluations.py
+**Goal:** Define test cases and create an evaluator with a custom rubric.
 
-**What it does:** Evaluates agent responses against expected outputs using manually defined test cases.
+**What to implement:**
+- Add test cases using `Case[str, str]` with input, expected output, and metadata
+- Create an `OutputEvaluator` with a rubric that scores accuracy, tool usage, and clarity
 
 **Key concepts:**
-
-- Define test cases with `Case[str, str]` specifying input, expected output, and metadata
-- Use `OutputEvaluator` with a custom rubric for LLM-as-judge scoring
-- Run experiments and display results with `experiment.run_evaluations()`
 
 ```python
 from strands_evals import Case, Experiment
@@ -48,15 +88,15 @@ experiment = Experiment[str, str](cases=test_cases, evaluators=[OutputEvaluator(
 reports = experiment.run_evaluations(get_response)
 ```
 
-### tools_evaluations.py
+### Exercise 2: `tools_evaluations.py`
 
-**What it does:** Validates that the agent uses the correct tools in the right order.
+**Goal:** Implement `get_response` to return both output AND tool trajectory.
+
+**What to implement:**
+- Use `tools_use_extractor.extract_agent_tools_used_from_messages(agent.messages)` to extract the tools used
+- Return a dict with `"output"` and `"trajectory"` keys
 
 **Key concepts:**
-
-- Extract tool usage from agent messages with `tools_use_extractor`
-- Define `expected_trajectory` in test cases
-- Use `TrajectoryEvaluator` to compare actual vs expected tool usage
 
 ```python
 from strands_evals.evaluators import TrajectoryEvaluator
@@ -71,15 +111,15 @@ test_case = Case[str, str](
 )
 ```
 
-### simulation_evaluation.py
+### Exercise 3: `simulation_evaluation.py`
 
-**What it does:** Runs multi-turn conversations with a simulated user to test agent behavior over extended interactions.
+**Goal:** Define customer profiles and implement a multi-turn simulation loop.
+
+**What to implement:**
+- Create `ActorProfile` entries in `CUSTOMER_PROFILES` with traits, context, and goals
+- Implement `run_simulation` to create an `ActorSimulator`, loop with `has_next()` / `act()`, and return the result
 
 **Key concepts:**
-
-- `ActorSimulator` simulates a user with specific goals and personas
-- Define custom `ActorProfile` with traits, context, and goals
-- Test how agents handle follow-up questions and conversation flow
 
 ```python
 from strands_evals import ActorSimulator
@@ -101,15 +141,14 @@ simulator = ActorSimulator(
 )
 ```
 
-### generated_evaluations.py
+### Exercise 4: `generated_evaluations.py`
 
-**What it does:** Automatically generates test cases from a context description instead of writing them manually.
+**Goal:** Write an `AGENT_CONTEXT` description so the LLM can auto-generate test cases.
+
+**What to implement:**
+- Describe your agent's capabilities, example interactions, and constraints in `AGENT_CONTEXT`
 
 **Key concepts:**
-
-- Describe your agent's capabilities in a context string
-- `ExperimentGenerator` creates diverse test cases with expected outputs
-- Useful for quickly building comprehensive test suites
 
 ```python
 from strands_evals.generators import ExperimentGenerator
@@ -130,7 +169,9 @@ experiment = await generator.from_context_async(
 
 ---
 
-## Evaluator Types
+## 📖 Key Concepts
+
+### Evaluator Types
 
 The `strands-agents-evals` framework provides evaluators that operate at different levels of granularity:
 
@@ -140,180 +181,7 @@ The `strands-agents-evals` framework provides evaluators that operate at differe
 | `TRACE_LEVEL`   | Single turn       | Turn-by-turn conversation analysis |
 | `SESSION_LEVEL` | Full conversation | End-to-end goal achievement        |
 
-### Response Quality Evaluators
-
-#### OutputEvaluator
-
-**Level:** `OUTPUT_LEVEL`  
-**Purpose:** Flexible LLM-based evaluation with custom rubrics.
-
-**When to use:** Assess any subjective quality (safety, relevance, tone, accuracy).
-
-```python
-from strands_evals.evaluators import OutputEvaluator
-
-evaluator = OutputEvaluator(
-    rubric="""
-    Score 1.0 if the response:
-    - Directly answers the user's question
-    - Provides accurate information
-    - Uses appropriate tone
-
-    Score 0.5 if partially meets criteria
-    Score 0.0 if fails to meet criteria
-    """,
-    include_inputs=True
-)
-```
-
-#### HelpfulnessEvaluator
-
-**Level:** `TRACE_LEVEL`  
-**Purpose:** Evaluate response helpfulness from user perspective.
-
-**When to use:** Measure user satisfaction and response utility.
-
-```python
-from strands_evals.evaluators import HelpfulnessEvaluator
-
-evaluator = HelpfulnessEvaluator()
-```
-
-#### FaithfulnessEvaluator
-
-**Level:** `TRACE_LEVEL`  
-**Purpose:** Assess factual accuracy and groundedness.
-
-**When to use:** Verify responses are truthful and well-supported.
-
-```python
-from strands_evals.evaluators import FaithfulnessEvaluator
-
-evaluator = FaithfulnessEvaluator()
-```
-
-### Tool Usage Evaluators
-
-#### ToolSelectionEvaluator
-
-**Level:** `TRACE_LEVEL`  
-**Purpose:** Evaluate whether correct tools were selected.
-
-**When to use:** Assess tool choice accuracy in multi-tool scenarios.
-
-```python
-from strands_evals.evaluators import ToolSelectionEvaluator
-
-evaluator = ToolSelectionEvaluator()
-```
-
-#### ToolParameterEvaluator
-
-**Level:** `TRACE_LEVEL`  
-**Purpose:** Evaluate accuracy of tool parameters.
-
-**When to use:** Verify correct parameter values for tool calls.
-
-```python
-from strands_evals.evaluators import ToolParameterEvaluator
-
-evaluator = ToolParameterEvaluator()
-```
-
-### Conversation Flow Evaluators
-
-#### TrajectoryEvaluator
-
-**Level:** `SESSION_LEVEL`  
-**Purpose:** Assess sequence of actions and tool usage patterns.
-
-**When to use:** Evaluate multi-step reasoning and workflow adherence.
-
-```python
-from strands_evals.evaluators import TrajectoryEvaluator
-
-evaluator = TrajectoryEvaluator(
-    rubric="""
-    Evaluate tool usage:
-    1. Correct tools selected?
-    2. Logical order?
-    3. No unnecessary calls?
-
-    Score 1.0 for optimal usage.
-    Score 0.0 for wrong tools.
-    """,
-    include_inputs=True
-)
-
-# In your test case:
-Case[str, str](
-    input="Calculate 5 + 3",
-    expected_trajectory=["sum_calculator"],
-)
-```
-
-#### InteractionsEvaluator
-
-**Level:** `SESSION_LEVEL`  
-**Purpose:** Analyze conversation patterns and interaction quality.
-
-**When to use:** Assess conversation flow and engagement patterns.
-
-```python
-from strands_evals.evaluators import InteractionsEvaluator
-
-evaluator = InteractionsEvaluator()
-```
-
-### Goal Achievement Evaluators
-
-#### GoalSuccessRateEvaluator
-
-**Level:** `SESSION_LEVEL`  
-**Purpose:** Determine if user goals were successfully achieved.
-
-**When to use:** Measure end-to-end task completion success.
-
-```python
-from strands_evals.evaluators import GoalSuccessRateEvaluator
-
-evaluator = GoalSuccessRateEvaluator()
-```
-
-### Custom Evaluators
-
-**Purpose:** Create domain-specific evaluation logic for requirements not covered by built-in evaluators.
-
-```python
-from strands_evals.evaluators import Evaluator
-
-class CustomEvaluator(Evaluator):
-    def evaluate(self, data):
-        # Your custom evaluation logic
-        score = calculate_custom_metric(data.expected_output, data.output)
-        return EvaluationResult(score=score, reasoning="...")
-```
-
----
-
-## Combining Evaluators
-
-Assess different aspects comprehensively by combining multiple evaluators:
-
-```python
-evaluators = [
-    HelpfulnessEvaluator(),      # User experience
-    FaithfulnessEvaluator(),     # Accuracy
-    ToolSelectionEvaluator(),    # Tool usage
-    GoalSuccessRateEvaluator()   # Success rate
-]
-
-experiment = Experiment(cases=test_cases, evaluators=evaluators)
-```
-
----
-
-## Scoring Methods
+### Scoring Methods
 
 For trajectory evaluation, the framework provides built-in scoring helpers:
 
@@ -323,9 +191,7 @@ For trajectory evaluation, the framework provides built-in scoring helpers:
 | `in_order_match_scorer`  | Expected tools appear in order (allows extras) | Flexible workflow with optional steps |
 | `any_order_match_scorer` | All expected tools present (any order)         | When order doesn't matter             |
 
----
-
-## Best Practices
+### Best Practices
 
 1. **Start simple:** Begin with `OutputEvaluator` and manual test cases, then add complexity
 2. **Use meaningful rubrics:** Clear, specific rubrics lead to better LLM-as-judge evaluations
@@ -335,7 +201,7 @@ For trajectory evaluation, the framework provides built-in scoring helpers:
 
 ---
 
-## Further Reading
+## 🔗 Further Reading
 
 - [Strands Evals Documentation](https://strandsagents.com/latest/documentation/docs/user-guide/evals-sdk/quickstart/)
 - [User Simulation Guide](https://strandsagents.com/latest/documentation/docs/user-guide/evals-sdk/simulators/user_simulation/)
