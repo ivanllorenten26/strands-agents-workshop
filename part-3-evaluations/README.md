@@ -40,13 +40,13 @@ cd part-3-evaluations/starter
 2. Create and activate a virtual environment:
 
 ```bash
-uv venv && source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate
 ```
 
 3. Install dependencies:
 
 ```bash
-uv pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 4. Review the starter code and look for TODOs in each file
