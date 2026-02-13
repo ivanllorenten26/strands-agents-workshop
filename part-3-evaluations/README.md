@@ -8,7 +8,7 @@ Learn how to evaluate AI agents using the `strands-agents-evals` framework. This
 cd starter
 uv venv && source .venv/bin/activate
 uv pip install -r requirements.txt
-python evaluations.py
+python output_evaluations.py
 ```
 
 ---
