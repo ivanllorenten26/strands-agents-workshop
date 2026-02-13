@@ -17,12 +17,12 @@ python output_evaluations.py
 
 | File                                                          | Purpose                                        | Key Components                               |
 | ------------------------------------------------------------- | ---------------------------------------------- | -------------------------------------------- |
-| [evaluations.py](solution/evaluations.py)                     | Basic output evaluation with manual test cases | `Case`, `Experiment`, `OutputEvaluator`      |
+| [output_evaluations.py](solution/output_evaluations.py)       | Basic output evaluation with manual test cases | `Case`, `Experiment`, `OutputEvaluator`      |
 | [tools_evaluations.py](solution/tools_evaluations.py)         | Tool usage trajectory evaluation               | `TrajectoryEvaluator`, `tools_use_extractor` |
 | [simulation_evaluation.py](solution/simulation_evaluation.py) | Multi-turn conversation simulation             | `ActorSimulator`, `ActorProfile`             |
 | [generated_evaluations.py](solution/generated_evaluations.py) | Auto-generated test cases                      | `ExperimentGenerator`                        |
 
-### evaluations.py
+### output_evaluations.py
 
 **What it does:** Evaluates agent responses against expected outputs using manually defined test cases.
 
