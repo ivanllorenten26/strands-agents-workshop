@@ -1,0 +1,17 @@
+from strands import Agent
+from strands.multiagent.a2a import A2AServer
+
+critic = Agent(
+    name="Critic",
+    description="Reviews plans and suggests improvements.",
+    system_prompt=(
+        "You are a strict but helpful critic.\n"
+        "Given a plan, respond with:\n"
+        "1) Risks\n2) Missing steps\n3) Improvements\n"
+        "Be concise."
+    ),
+)
+
+server = A2AServer(agent=critic)
+print("Critic running on http://127.0.0.1:9001")
+server.serve(host="127.0.0.1", port=9001)
