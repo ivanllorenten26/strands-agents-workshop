@@ -3,24 +3,26 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-from strands import Agent, tool
+from strands import Agent
+from strands.multiagent import Swarm
 
 from shared.terminal_loop import terminal_loop
 
 
-@tool
-def cards_specialised_agent():
-    return Agent(system_prompt="You are an expert in Cards, in the context of a Bank.")
-
-
 def initialize_agent():
-    orchestrator = Agent(
-        # model= we're using the model by default.
-        tools=[cards_specialised_agent],
-        system_prompt="Route queries to specialized agents:"
-                      "- cards questions -> cards_specialised_agent",
+    researcher = Agent(name="researcher", system_prompt="You research and gather facts...")
+    coder = Agent(name="coder", system_prompt="You write code...")
+    reviewer = Agent(name="reviewer", system_prompt="You review and improve code...")
+    architect = Agent(name="architect", system_prompt="You design the system...")
+
+    return Swarm(
+        [coder, researcher, reviewer, architect],
+        entry_point=researcher,
+        max_handoffs=20,
+        max_iterations=20,
+        execution_timeout=900.0,
+        node_timeout=300.0,
     )
-    return orchestrator
 
 
 def main():
@@ -28,7 +30,7 @@ def main():
     Main entry point for the agent application.
     """
     print("=" * 60)
-    print("Strands Agents Workshop - Part 4: Patterns - Agents as Tools")
+    print("Strands Agents Workshop - Part 4: Patterns - Swarm")
     print("=" * 60)
     print()
 
@@ -36,7 +38,7 @@ def main():
         # Initialize the agent
         print("Initializing agent...")
         agent = initialize_agent()
-        print("Agent ready! Try to ask What is a debit card\n")
+        print("Agent ready! Try to ask Design and implement a simple REST API for a todo app\n")
 
         # Start the terminal loop
         terminal_loop(agent)
