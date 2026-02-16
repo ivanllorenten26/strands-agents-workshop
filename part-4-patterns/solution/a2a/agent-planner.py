@@ -19,6 +19,11 @@ planner = Agent(
     ),
 )
 
-server = A2AServer(agent=planner)
-print("Planner running on http://127.0.0.1:9000")
-server.serve(host="127.0.0.1", port=9000)
+server = A2AServer(
+    agent=planner,
+    host="127.0.0.1",
+    port=9002,
+    http_url="http://127.0.0.1:9002"
+)
+print("Planner running on http://127.0.0.1:9002")
+server.serve()

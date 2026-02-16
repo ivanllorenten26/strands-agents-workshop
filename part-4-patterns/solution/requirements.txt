@@ -2,3 +2,4 @@ strands-agents
 strands-agents-tools
 bedrock-agentcore[strands-agents]
 strands-agents-tools[a2a_client]
+strands-agents[a2a]

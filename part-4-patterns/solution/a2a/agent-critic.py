@@ -12,6 +12,11 @@ critic = Agent(
     ),
 )
 
-server = A2AServer(agent=critic)
+server = A2AServer(
+    agent=critic,
+    host="127.0.0.1",
+    port=9001,
+    http_url="http://127.0.0.1:9001"
+)
 print("Critic running on http://127.0.0.1:9001")
-server.serve(host="127.0.0.1", port=9001)
+server.serve()
