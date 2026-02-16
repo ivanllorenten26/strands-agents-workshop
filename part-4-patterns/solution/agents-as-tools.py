@@ -1,21 +1,19 @@
 import os
 import sys
 
-from strands import Agent, tool
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from terminal_loop import terminal_loop
 
-# Here is the custom tool calculator.
-@tool
-def calculate_sum(a: int, b: int) -> int:
-    return a + b
+from strands import Agent
+from strands_tools import calculator
+
+from shared.terminal_loop import terminal_loop
+
 
 def initialize_agent():
     # Create and configure the agent with the BedrockModel
     return Agent(
         # model= we're using the model by default.
-        tools=[calculate_sum],
+        tools=[calculator],
         system_prompt="You are a helpful AI assistant participating in a Strands Agents workshop. "
                       "You help users understand agent concepts and answer their questions clearly.",
     )
@@ -33,7 +31,7 @@ def main():
         # Initialize the agent
         print("Initializing agent...")
         agent = initialize_agent()
-        print("Agent ready! Try to ask Calculate 42 + 9\n")
+        print("Agent ready! Try to ask What is 42 ^ 9\n")
 
         # Start the terminal loop
         terminal_loop(agent)
