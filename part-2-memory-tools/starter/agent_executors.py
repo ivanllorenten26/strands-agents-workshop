@@ -10,7 +10,7 @@ import sys
 from strands import Agent, tool
 from strands.tools.executors import ConcurrentToolExecutor
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from terminal_loop import terminal_loop
 
 def initialize_agent():
