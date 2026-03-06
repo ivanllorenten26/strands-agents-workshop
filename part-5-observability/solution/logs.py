@@ -1,6 +1,8 @@
 import logging
+import os
 
 from strands import Agent
+from strands.models import BedrockModel
 from strands_tools import calculator
 
 # Configure the root strands logger
@@ -13,5 +15,13 @@ logging.basicConfig(
 )
 
 # Create an agent with the calculator tool
-agent = Agent(tools=[calculator])
+model = BedrockModel(
+    model_id=os.getenv("MODEL_ID"),
+)
+
+
+agent = Agent(
+    model=model,
+    tools=[calculator]
+)
 result = agent("What is 125 * 37?")
