@@ -1,0 +1,2 @@
+strands-agents[otel]
+strands-agents-tools
