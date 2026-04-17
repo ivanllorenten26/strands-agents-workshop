@@ -8,12 +8,26 @@ perform comprehensive multi-turn evaluation. It collects OpenTelemetry spans
 during the conversation and uses session-level evaluators (HelpfulnessEvaluator,
 GoalSuccessRateEvaluator) alongside output-level evaluators.
 """
+import os
 
 from strands import Agent
+from strands.models.bedrock import BedrockModel
 from strands_evals import Case, Experiment, ActorSimulator
 from strands_evals.evaluators import HelpfulnessEvaluator, GoalSuccessRateEvaluator
 from strands_evals.mappers import StrandsInMemorySessionMapper
 from strands_evals.telemetry import StrandsEvalsTelemetry
+from strands_evals.simulation.profiles.actor_profile import DEFAULT_USER_PROFILE_SCHEMA
+from strands_evals.simulation.prompt_templates.actor_profile_extraction import ACTOR_PROFILE_PROMPT_TEMPLATE
+from strands_evals.simulation.prompt_templates.actor_system_prompt import DEFAULT_USER_SIMULATOR_PROMPT_TEMPLATE
+from strands_evals.types.simulation import ActorProfile
+
+MODEL_ID = os.getenv("MODEL_ID", "")
+
+model = BedrockModel(
+    model_id=MODEL_ID,
+    region_name="eu-central-1",
+    streaming=False,
+)
 
 # Setup in-memory telemetry to capture spans for trace-based evaluation
 telemetry = StrandsEvalsTelemetry().setup_in_memory_exporter()
@@ -24,9 +38,23 @@ def run_simulation(case: Case) -> dict:
     """Run a simulation and collect telemetry spans for trace-based evaluation."""
     print(f"\n>>> Starting simulation: {case.name}")
 
-    # Create simulator from case metadata
-    simulator = ActorSimulator.from_case_for_user_simulator(
-        case=case,
+    # Generate the actor profile using our model
+    # (workaround: from_case_for_user_simulator uses the default model for profile
+    # generation, which we don't have access to)
+    task_description = case.metadata.get("task_description", "") if case.metadata else ""
+    profile_prompt = ACTOR_PROFILE_PROMPT_TEMPLATE.format(
+        initial_query=case.input,
+        task_description=task_description,
+        example=DEFAULT_USER_PROFILE_SCHEMA,
+    )
+    profile_agent = Agent(model=model, callback_handler=None)
+    profile_result = profile_agent(profile_prompt, structured_output_model=ActorProfile)
+
+    simulator = ActorSimulator(
+        actor_profile=profile_result.structured_output,
+        initial_query=case.input,
+        system_prompt_template=DEFAULT_USER_SIMULATOR_PROMPT_TEMPLATE,
+        model=model,
         max_turns=8,
     )
 
@@ -34,6 +62,7 @@ def run_simulation(case: Case) -> dict:
 
     # Create agent with trace attributes for span correlation
     agent = Agent(
+        model=model,
         system_prompt="You are a knowledgeable tech support agent. You help users "
         "troubleshoot software issues, explain technical concepts, and guide them "
         "through solutions step by step.",
@@ -107,8 +136,8 @@ test_cases = [
 
 # Combine session-level evaluators for comprehensive assessment
 evaluators = [
-    HelpfulnessEvaluator(),
-    GoalSuccessRateEvaluator(),
+    HelpfulnessEvaluator(model=model),
+    GoalSuccessRateEvaluator(model=model),
 ]
 
 experiment = Experiment(cases=test_cases, evaluators=evaluators)

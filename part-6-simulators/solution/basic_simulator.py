@@ -7,19 +7,47 @@ A minimal example showing how to use ActorSimulator.from_case_for_user_simulator
 to automatically generate a user persona from a test case and run a multi-turn
 conversation with an agent.
 """
+import os
 
 from strands import Agent
+from strands.models.bedrock import BedrockModel
 from strands_evals import Case, Experiment, ActorSimulator
 from strands_evals.evaluators import OutputEvaluator
+from strands_evals.simulation.profiles.actor_profile import DEFAULT_USER_PROFILE_SCHEMA
+from strands_evals.simulation.prompt_templates.actor_profile_extraction import ACTOR_PROFILE_PROMPT_TEMPLATE
+from strands_evals.simulation.prompt_templates.actor_system_prompt import DEFAULT_USER_SIMULATOR_PROMPT_TEMPLATE
+from strands_evals.types.simulation import ActorProfile
+
+MODEL_ID = os.getenv("MODEL_ID", "")
+
+model = BedrockModel(
+    model_id=MODEL_ID,
+    region_name="eu-central-1",
+    streaming=False,
+)
 
 
 def run_simulation(case: Case) -> str:
     """Run a multi-turn conversation between a simulated user and an agent."""
     print(f"\n>>> Starting simulation: {case.name}")
 
-    # Create simulator from the case — profile is auto-generated from metadata
-    simulator = ActorSimulator.from_case_for_user_simulator(
-        case=case,
+    # Generate the actor profile using our model
+    # (workaround: from_case_for_user_simulator uses the default model for profile
+    # generation, which we don't have access to)
+    task_description = case.metadata.get("task_description", "") if case.metadata else ""
+    profile_prompt = ACTOR_PROFILE_PROMPT_TEMPLATE.format(
+        initial_query=case.input,
+        task_description=task_description,
+        example=DEFAULT_USER_PROFILE_SCHEMA,
+    )
+    profile_agent = Agent(model=model, callback_handler=None)
+    profile_result = profile_agent(profile_prompt, structured_output_model=ActorProfile)
+
+    simulator = ActorSimulator(
+        actor_profile=profile_result.structured_output,
+        initial_query=case.input,
+        system_prompt_template=DEFAULT_USER_SIMULATOR_PROMPT_TEMPLATE,
+        model=model,
         max_turns=5,
     )
 
@@ -27,6 +55,7 @@ def run_simulation(case: Case) -> str:
 
     # Create the agent under test
     agent = Agent(
+        model=model,
         system_prompt="You are a helpful travel assistant. You help users plan trips, "
         "find destinations, and provide travel advice.",
         callback_handler=None,
@@ -78,6 +107,7 @@ test_cases = [
 
 # Evaluate the conversation quality
 evaluator = OutputEvaluator(
+    model=model,
     rubric="""
     Evaluate the simulated conversation based on:
 

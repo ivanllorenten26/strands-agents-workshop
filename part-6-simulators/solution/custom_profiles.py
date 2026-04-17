@@ -7,11 +7,21 @@ This example shows how to define custom ActorProfile objects to simulate
 specific user personas. Each profile has traits, context, and a goal that
 shape how the simulated user interacts with the agent.
 """
+import os
 
 from strands import Agent
+from strands.models.bedrock import BedrockModel
 from strands_evals import Case, Experiment, ActorSimulator
 from strands_evals.evaluators import OutputEvaluator
 from strands_evals.types.simulation import ActorProfile
+
+MODEL_ID = os.getenv("MODEL_ID", "")
+
+model = BedrockModel(
+    model_id=MODEL_ID,
+    region_name="eu-central-1",
+    streaming=False,
+)
 
 
 # Define distinct user personas with different traits and goals
@@ -67,6 +77,7 @@ def run_simulation(case: Case) -> str:
     simulator = ActorSimulator(
         actor_profile=profile,
         initial_query=case.input,
+        model=model,
         max_turns=5,
         system_prompt_template="""You are simulating a user with the following profile:
 {actor_profile}
@@ -83,6 +94,7 @@ Guidelines:
     print(f">>> Goal: {profile.actor_goal}")
 
     agent = Agent(
+        model=model,
         system_prompt="You are a helpful travel assistant. Adapt your communication style "
         "to match the user — be concise with busy users, detailed with planners, "
         "and reassuring with nervous travelers.",
@@ -140,6 +152,7 @@ test_cases = [
 ]
 
 evaluator = OutputEvaluator(
+    model=model,
     rubric="""
     Evaluate the conversation considering the user persona:
 
