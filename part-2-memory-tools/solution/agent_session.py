@@ -18,7 +18,7 @@ from strands import Agent
 from strands.session import FileSessionManager
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from terminal_loop import terminal_loop
+from shared.terminal_loop import terminal_loop
 
 
 def initialize_agent():

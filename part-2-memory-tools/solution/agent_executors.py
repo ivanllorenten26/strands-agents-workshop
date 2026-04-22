@@ -11,7 +11,7 @@ from strands import Agent, tool
 from strands.tools.executors import ConcurrentToolExecutor
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from terminal_loop import terminal_loop
+from shared.terminal_loop import terminal_loop
 
 from strands_tools import current_time
 
