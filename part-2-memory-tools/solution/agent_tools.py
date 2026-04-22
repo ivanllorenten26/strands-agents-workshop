@@ -3,8 +3,8 @@ import sys
 
 from strands import Agent
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'shared')))
-from terminal_loop import terminal_loop
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from shared.terminal_loop import terminal_loop
 from strands_tools import calculator
 
 

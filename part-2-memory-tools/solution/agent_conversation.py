@@ -15,8 +15,8 @@ import sys
 from strands import Agent
 from strands.agent import SlidingWindowConversationManager
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'shared')))
-from terminal_loop import terminal_loop
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from shared.terminal_loop import terminal_loop
 
 
 def initialize_agent():
